@@ -56,12 +56,10 @@ api_requires = requires + [
 
 entry_points = {
     'paste.app_factory': [
-        'main = openprocurement.integrations.treasury.api:main'
+        'main = openprocurement.integrations.treasury.databridge:main'
     ],
     'console_scripts': [
         'integrations_treasury_bridge = openprocurement.integrations.treasury.databridge:main',
-        'integrations_treasury_api = openprocurement.integrations.treasury.api:main',
-        'main = openprocurement.integrations.treasury.api:main',
     ]
 }
 
