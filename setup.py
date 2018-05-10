@@ -24,7 +24,6 @@ test_requires = requires + [
     'python-coveralls',
     'mock==1.0.1',
     'requests_mock==1.3.0',
-    'mysql-connector==2.1.6',
     'bottle'
 ]
 
@@ -37,7 +36,6 @@ databridge_test_requires = requires + [
 ]
 
 databridge_requires = requires + [
-    'mysql-connector==2.1.6',
     'PyYAML',
     'gevent',
     'LazyDB',
@@ -56,7 +54,7 @@ api_requires = requires + [
 
 entry_points = {
     'paste.app_factory': [
-        'main = openprocurement.integrations.treasury.databridge:main'
+        'main = openprocurement.integrations.treasury:main'
     ],
     'console_scripts': [
         'integrations_treasury_bridge = openprocurement.integrations.treasury.databridge:main',
