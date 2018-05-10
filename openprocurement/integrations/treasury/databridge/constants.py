@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-retry_multi = 1
+retry_mult = 1

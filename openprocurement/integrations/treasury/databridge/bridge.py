@@ -19,7 +19,7 @@ from openprocurement.integrations.treasury.databridge.journal_msg_ids import (
     DATABRIDGE_START,
     DATABRIDGE_DOC_SERVICE_CONN_ERROR
 )
-from openprocurement.integrations.treasury.databridge.constants import retry_multi
+from openprocurement.integrations.treasury.databridge.constants import retry_mult
 
 monkey.patch_all()
 
@@ -50,7 +50,7 @@ class DataBridge(object):
     def config_get(self, name):
         return self.config.get('app:api', name)
 
-    @retry(stop_max_attempt_number=5, wait_exponential_multiplier=retry_multi)
+    @retry(stop_max_attempt_number=5, wait_exponential_multiplier=retry_mult)
     def check_openprocurement_api(self):
         try:
             pass

@@ -11,6 +11,8 @@ requires = [
     'mock',
     'pyramid_exclog',
     'requests',
+    'restkit',
+    'retrying',
     'pyramid',
     'pytz',
     'simplejson',
@@ -41,6 +43,8 @@ databridge_requires = requires + [
     'LazyDB',
     'ExtendedJournalHandler',
     'requests',
+    'restkit',
+    'retrying',
     'openprocurement_client>=1.0b2'
 ]
 
