@@ -8,7 +8,7 @@ from retrying import retry
 from datetime import datetime
 
 from openprocurement.integrations.treasury.databridge.base_worker import BaseWorker
-from openprocurement.integrations.treasury.databridge.constants import retry_multi
+from openprocurement.integrations.treasury.databridge.constants import retry_mult
 
 
 monkey.patch_all()
@@ -26,7 +26,7 @@ class Scanner(BaseWorker):
         self.initialization_event = Event()
         self.sleep_change_value = sleep_change_value
 
-    @retry(stop_max_attempt_number=5, wait_exponential_multiplier=retry_multi)
+    @retry(stop_max_attempt_number=5, wait_exponential_multiplier=retry_mult)
     def initialize_sync(self, params=None, direction=None):
         if direction == 'backward':
             self.initialization_event.clear()
