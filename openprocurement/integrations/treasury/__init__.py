@@ -4,25 +4,35 @@
 Main entry point
 """
 
+import argparse
+import os
+
 if 'test' not in __import__('sys').argv[0]:
     import gevent.monkey
     gevent.monkey.patch_all()
 
+import logging.config
 from logging import getLogger
+from ConfigParser import SafeConfigParser
 
 from openprocurement.integrations.treasury.databridge.bridge import DataBridge
 
 
-LOGGER = getLogger("{}.init".format(__name__))
+LOGGER = getLogger(__name__)
 
-def main(global_config, **settings):
-    from pyramid.config import Configurator
 
-    from pyramid.authentication import BasicAuthAuthenticationPolicy
-    from pyramid.authorization import ACLAuthorizationPolicy
-    from pyramid.config import Configurator
-    from pyramid.events import NewRequest, ContextFound
-    from pyramid.renderers import JSON, JSONP
+def main(*args, **settings):
+    parser = argparse.ArgumentParser(description='Data Bridge')
+    parser.add_argument('config', type=str, help='Path to configuration file')
 
-    LOGGER.info('Run data bridge...')
+    params = parser.parse_args()
+
+    if os.path.isfile(params.config):
+        config = SafeConfigParser()
+        config.read(params.config)
+        logging.config.fileConfig(params.config)
+        bridge = DataBridge(config)
+        bridge.launch()
+    else:
+        LOGGER.info('Invalid configuration file. Exiting...')
 

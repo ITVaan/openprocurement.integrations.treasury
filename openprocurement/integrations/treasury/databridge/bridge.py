@@ -93,25 +93,3 @@ class DataBridge(object):
                 break
             gevent.sleep(self.delay)
 
-
-def main():
-    logger.info('Run data bridge...')
-
-    parser = argparse.ArgumentParser(description='Data Bridge')
-    parser.add_argument('config', type=str, help='Path to configuration file')
-
-    params = parser.parse_args()
-
-    if os.path.isfile(params.config):
-        config = SafeConfigParser()
-        config.read(params.config)
-        logging.config.fileConfig(params.config)
-        bridge = DataBridge(config)
-        bridge.launch()
-    else:
-        logger.info('Invalid configuration file. Exiting...')
-
-
-if __name__ == '__main__':
-    main()
-
