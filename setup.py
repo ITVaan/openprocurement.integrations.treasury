@@ -13,6 +13,8 @@ requires = [
     'requests',
     'restkit',
     'retrying',
+    'esculator',
+    'iso8601',
     'pyramid',
     'pytz',
     'simplejson',
@@ -45,6 +47,9 @@ databridge_requires = requires + [
     'requests',
     'restkit',
     'retrying',
+    'esculator',
+    'iso8601',
+    'pytz',
     'openprocurement_client>=1.0b2'
 ]
 
