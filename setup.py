@@ -17,6 +17,7 @@ requires = [
     'iso8601',
     'pyramid',
     'pytz',
+    'redis',
     'simplejson',
     'request_id_middleware',
     'server_cookie_middleware',
@@ -50,6 +51,7 @@ databridge_requires = requires + [
     'esculator',
     'iso8601',
     'pytz',
+    'redis',
     'openprocurement_client>=1.0b2'
 ]
 

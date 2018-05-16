@@ -63,7 +63,7 @@ class ContractingDataBridge(object):
         self.config = config
 
         # Cache DB settings
-        self.cache_db = CacheDB(self.config.get('main'))
+        self.cache_db = CacheDB(self.config)
         self._backend = 'redis'
         self._host = self.config_get('cache_host')
         self._port = self.config_get('cache_port') or 6379
@@ -84,6 +84,8 @@ class ContractingDataBridge(object):
 
         self.api_server = self.config_get('tenders_api_server')
         self.api_version = self.config_get('tenders_api_version')
+        self.contracting_api_server = self.config_get('contracting_api_server')
+        self.contracting_api_version = self.config_get('contracting_api_version')
         self.ro_api_server = self.config_get('public_tenders_api_server') or self.api_server
 
         self.resource = dict()
@@ -92,9 +94,6 @@ class ContractingDataBridge(object):
         self.client = None
         self.tenders_sync_client = None
         self.clients_initialize()
-
-        self.contracting_api_server = self.config_get('contracting_api_server')
-        self.contracting_api_version = self.config_get('contracting_api_version')
 
         self.initial_sync_point = dict()
         self.services_not_available = event.Event()
@@ -152,7 +151,7 @@ class ContractingDataBridge(object):
         self.tenders_sync_client = TendersClientSync('', host_url=self.ro_api_server, api_version=self.api_version)
 
     def contracting_client_init(self):
-        logger.info('Initialization contracting clients.', extra=journal_context({"MESSAGE_ID": DATABRIDGE_INFO}, {}))
+        logger.info('Initialization contracting clients.', extra=journal_context({'MESSAGE_ID': DATABRIDGE_INFO}, {}))
 
         self.contracting_client = ContractingClient(
             self.config_get('api_token'),
@@ -162,9 +161,11 @@ class ContractingDataBridge(object):
 
         self.contracting_client_ro = self.contracting_client
 
-        conditions = [self.api_server == self.contracting_api_server, self.api_version == self.contracting_api_version]
-
         if self.config_get('public_tenders_api_server'):
+            conditions = [
+                self.api_server == self.contracting_api_server, self.api_version == self.contracting_api_version
+            ]
+
             if all(conditions):
                 self.contracting_client_ro = ContractingClient(
                     '',
@@ -286,7 +287,7 @@ class ContractingDataBridge(object):
                 'Sleep {} sync...'.format(direction), extra=journal_context({"MESSAGE_ID": DATABRIDGE_SYNC_SLEEP})
             )
 
-            gevent.sleep(delay)
+            gevent.sleep(float(delay))
 
             logger.info(
                 'Restore {} sync'.format(direction), extra=journal_context({"MESSAGE_ID": DATABRIDGE_SYNC_RESUME})
@@ -436,11 +437,11 @@ class ContractingDataBridge(object):
                     extra=journal_context({'MESSAGE_ID': DATABRIDGE_EXCEPTION}, {})
                 )
                 logger.exception(e)
-                gevent.sleep(self.on_error_delay)
+                gevent.sleep(float(self.on_error_delay))
 
                 raise
 
-            gevent.sleep(0)
+            gevent.sleep(10)
 
     def prepare_contract_data(self):
         unsuccessful_contracts = set()
@@ -846,7 +847,7 @@ class ContractingDataBridge(object):
         counter = 0
 
         while True:
-            gevent.sleep(self.jobs_watcher_delay)
+            gevent.sleep(float(self.jobs_watcher_delay))
 
             if counter == 20:
                 logger.info(

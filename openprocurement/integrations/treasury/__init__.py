@@ -9,7 +9,7 @@ import os
 import logging
 import logging.config
 
-from yaml import load
+from ConfigParser import SafeConfigParser
 
 from openprocurement.integrations.treasury.databridge.bridge import ContractingDataBridge
 
@@ -24,9 +24,9 @@ def main(*args, **settings):
     params = parser.parse_args()
 
     if os.path.isfile(params.config):
-        with open(params.config) as config_file_obj:
-            config = load(config_file_obj.read())
-        logging.config.dictConfig(config)
+        config = SafeConfigParser()
+        config.read(params.config)
+        logging.config.fileConfig(params.config)
 
         if params.tender_id:
             ContractingDataBridge(config).sync_single_tender(params.tender_id)
