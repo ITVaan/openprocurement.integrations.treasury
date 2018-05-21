@@ -114,9 +114,6 @@ def generate_milestones(contract, tender):
 
     logger.info('Generate milestones for esco tender {}'.format(tender['id']))
 
-    # def to_decimal(fraction):
-    #     return str(Decimal(fraction.numerator) / Decimal(fraction.denominator))
-
     for sequence_number in xrange(1, last_milestone_sequence_number + 1):
         date_modified = datetime.now(TZ)
         milestone = {
@@ -193,7 +190,7 @@ def fill_base_contract_data(contract, tender):
             if related_awards:
                 award = related_awards[0]
 
-                if award.get("items"):
+                if award.get('items'):
                     logger.debug('Copying items from related award {}'.format(award['id']))
                     contract['items'] = award['items']
                 else:

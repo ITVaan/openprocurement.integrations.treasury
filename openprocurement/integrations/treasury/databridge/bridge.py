@@ -134,6 +134,7 @@ class ContractingDataBridge(object):
     @retry(stop_max_attempt_number=3, wait_exponential_multiplier=1000)
     def get_tender_credentials(self, tender_id):
         self.client.headers.update({'X-Client-Request-ID': generate_request_id()})
+
         logger.info(
             'Getting credentials for tender {}'.format(tender_id),
             extra=journal_context(
@@ -141,7 +142,9 @@ class ContractingDataBridge(object):
                 {self.resource['id_key_upper']: tender_id}
             )
         )
+
         data = self.client.extract_credentials(tender_id)
+
         logger.info(
             'Got tender {} credentials'.format(tender_id),
             extra=journal_context(
@@ -406,7 +409,7 @@ class ContractingDataBridge(object):
 
                 raise
 
-            gevent.sleep(10)
+            gevent.sleep(1)
 
     def prepare_contract_data(self):
         unsuccessful_contracts = set()
@@ -749,7 +752,7 @@ class ContractingDataBridge(object):
 
             for contract in tender.get('contracts', []):
                 if contract['status'] != 'active':
-                    logger.info("Skip contract {} in status {}".format(contract['id'], contract['status']))
+                    logger.info('Skip contract {} in status {}'.format(contract['id'], contract['status']))
                     continue
 
                 logger.info('Checking if contract {} already exists'.format(contract['id']))
@@ -786,7 +789,7 @@ class ContractingDataBridge(object):
             raise
         else:
             if transferred_contracts:
-                logger.info('Successfully transfered contracts: {}'.format(transferred_contracts))
+                logger.info('Successfully transferred contracts: {}'.format(transferred_contracts))
             else:
                 logger.info('Tender {} does not contain contracts to transfer'.format(tender_id))
 
